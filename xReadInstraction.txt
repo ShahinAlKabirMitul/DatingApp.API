@@ -1,1 +1,20 @@
+NotNet Core 
+
 dotnet new webapi -o DatingApp.API -n DatingApp.API
+$Env:ASPNETCORE_ENVIRONMENT = "Development"
+
+// dotnet watch add DatingApp.API under item group
+
+ <ItemGroup>
+     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+// install EntityFreamworkCode 
+
+ <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+
+// Migrations Create 
+
+dotnet ef migrations add InitialCreate
+// Update Database
+dotnet ef database update
