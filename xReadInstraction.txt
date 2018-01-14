@@ -18,3 +18,5 @@ $Env:ASPNETCORE_ENVIRONMENT = "Development"
 dotnet ef migrations add InitialCreate
 // Update Database
 dotnet ef database update
+
+dotnet ef database drop
