@@ -9,7 +9,7 @@ namespace DatingApp.API.Helper
         public PaginationHeader(int currentPage, int itemPerPage, int totalItems, int totalPage)
         {
             this.CurrentPage = currentPage;
-            this.ItemsPerPage = ItemsPerPage;
+            this.ItemsPerPage = itemPerPage;
             this.TotalItems = totalItems;
             this.TotalPages = totalPage;
         }
