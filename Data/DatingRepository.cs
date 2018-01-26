@@ -56,7 +56,15 @@ namespace DatingApp.API.Data
             {
                 users = users.Where( p=> p.DateOfBirth.CalculateAge() >= userParams.MinAge && p.DateOfBirth.CalculateAge() <= userParams.MaxAge );
             }
-
+            
+            if(userParams.Likers)
+            {
+                users = users.Where(u => u.Liker.Any(x => x.LikerId == u.Id));
+            }
+            if(userParams.Likees)
+            {
+                users = users.Where(u => u.Likee.Any(x => x.LikeeId == u.Id));
+            }
             if(!string.IsNullOrEmpty(userParams.OrderBy))
             {
                 switch(userParams.OrderBy)
@@ -67,7 +75,6 @@ namespace DatingApp.API.Data
                     default:
                              users = users.OrderByDescending( p=> p.LastActive);
                              break;
-
                 }
             }
 
