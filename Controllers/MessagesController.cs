@@ -66,12 +66,13 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
             messageForCreationDto.SenderId = userId;
             var recipient = await _repo.GetUser(messageForCreationDto.RecipientId);
+             var sender = await _repo.GetUser(messageForCreationDto.SenderId);
             if(recipient == null )
                 return BadRequest("Could not find user");
             var message = _mapper.Map<Message>(messageForCreationDto);
-             var messageToRetun = _mapper.Map<MessageForCreationDto>(message);
-            _repo.Add(message);
             
+            _repo.Add(message);
+            var messageToRetun = _mapper.Map<MessageToReturnDto>(message);
             if(await _repo.SaveAll())
             {
                
@@ -79,6 +80,25 @@ namespace DatingApp.API.Controllers
             }
                 
             throw new Exception("Creating the message failed on save");
+        }
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int userId) 
+        {
+             if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var messageFromRepo = await _repo.GetMessage(id);
+            if(messageFromRepo.SenderId == userId)
+                messageFromRepo.SenderDeleted = true;
+            if(messageFromRepo.RecipientId == userId)
+            {
+                messageFromRepo.RecipientDeleted = true;
+            }
+            if(messageFromRepo.SenderDeleted && messageFromRepo.RecipientDeleted)
+                _repo.Delete(messageFromRepo);
+            if(await _repo.SaveAll()){
+                return NoContent();
+            }
+            throw new ApplicationException("Error deleting message");
         }
     }
 }
